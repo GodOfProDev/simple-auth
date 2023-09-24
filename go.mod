@@ -1,3 +1,3 @@
-module github.com/godofprodev/simple-auth
+module github.com/godofprodev/simple-pass
 
 go 1.21
