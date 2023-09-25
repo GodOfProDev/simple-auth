@@ -1,6 +1,7 @@
 package router
 
 import (
+	"github.com/godofprodev/simple-pass/internal"
 	"github.com/godofprodev/simple-pass/internal/handlers"
 	"github.com/gofiber/fiber/v2"
 )
@@ -10,7 +11,9 @@ type Router struct {
 }
 
 func New() *Router {
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		ErrorHandler: customErrorHandler,
+	})
 
 	return &Router{app: app}
 }
@@ -34,4 +37,17 @@ func (r *Router) RegisterHandlers() {
 	v1 := r.app.Group("/v1")
 
 	v1.Get("/ping", h.HandlePing)
+}
+
+func customErrorHandler(c *fiber.Ctx, err error) error {
+	switch e := err.(type) {
+	case internal.APIError:
+		return c.Status(e.Status).JSON(e)
+	case internal.APISuccessData:
+		return c.Status(e.Status).JSON(e.Data)
+	case internal.APISuccessResponse:
+		return c.Status(e.Status).JSON(e)
+	default:
+		return c.Status(fiber.StatusInternalServerError).JSON(map[string]interface{}{"message": "internal server error"})
+	}
 }
