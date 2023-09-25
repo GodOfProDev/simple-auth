@@ -1,7 +1,9 @@
 package router
 
 import (
+	"fmt"
 	"github.com/godofprodev/simple-pass/internal"
+	"github.com/godofprodev/simple-pass/internal/config"
 	"github.com/godofprodev/simple-pass/internal/handlers"
 	"github.com/gofiber/fiber/v2"
 )
@@ -18,8 +20,8 @@ func New() *Router {
 	return &Router{app: app}
 }
 
-func (r *Router) Listen() error {
-	err := r.app.Listen(":8080")
+func (r *Router) Listen(s *config.ServerConfig) error {
+	err := r.app.Listen(fmt.Sprintf("%v:%v", s.Host, s.Port))
 	if err != nil {
 		return err
 	}
