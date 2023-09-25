@@ -1,6 +1,7 @@
 package router
 
 import (
+	"github.com/godofprodev/simple-pass/internal/handlers"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -28,9 +29,9 @@ func (r *Router) RegisterMiddlewares() {
 }
 
 func (r *Router) RegisterHandlers() {
+	h := handlers.New()
+
 	v1 := r.app.Group("/v1")
 
-	v1.Get("/signup", func(ctx *fiber.Ctx) error {
-		return ctx.SendString("HELLO WORLD")
-	})
+	v1.Get("/ping", h.HandlePing)
 }
