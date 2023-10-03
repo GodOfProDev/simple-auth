@@ -3,17 +3,17 @@ package models
 import "github.com/google/uuid"
 
 type User struct {
-	Id       uuid.UUID
-	Username string
-	Password []byte
+	Id       uuid.UUID `json:"id"`
+	Username string    `json:"username"`
+	Password []byte    `json:"-"`
 }
 
 type RegisterUserParams struct {
-	Username string
-	Password string
+	Username string `json:"username"`
+	Password string `json:"password"`
 }
 
 type LoginUserParams struct {
-	Username string
-	Password string
+	Username string `json:"username"`
+	Password string `json:"password"`
 }
