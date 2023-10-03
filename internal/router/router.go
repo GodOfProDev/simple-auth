@@ -45,7 +45,8 @@ func (r *Router) RegisterHandlers() {
 	v1 := r.app.Group("/v1")
 
 	v1.Get("/ping", h.HandlePing)
-	v1.Get("/register", h.HandleRegister)
+	v1.Post("/register", h.HandleRegister)
+	v1.Post("/login", h.HandleRegister)
 }
 
 func customErrorHandler(c *fiber.Ctx, err error) error {

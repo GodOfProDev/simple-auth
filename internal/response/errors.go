@@ -61,3 +61,10 @@ func ErrEncryptingPassword() APIError {
 		Msg:    "there was an issue encrypting the password",
 	}
 }
+
+func ErrIncorrectPassword() APIError {
+	return APIError{
+		Status: fiber.StatusBadRequest,
+		Msg:    "incorrect password",
+	}
+}

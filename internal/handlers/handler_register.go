@@ -9,13 +9,13 @@ import (
 )
 
 func (h *Handlers) HandleRegister(c *fiber.Ctx) error {
-	params := new(models.CreateUserParams)
+	params := new(models.RegisterUserParams)
 
 	if err := c.BodyParser(&params); err != nil {
 		return response.ErrParsingParams()
 	}
 
-	if params.User == "" {
+	if params.Username == "" {
 		return response.ErrRequired("user")
 	}
 	if params.Password == "" {
@@ -29,7 +29,7 @@ func (h *Handlers) HandleRegister(c *fiber.Ctx) error {
 
 	user := models.User{
 		Id:       uuid.New(),
-		Username: params.User,
+		Username: params.Username,
 		Password: encryptedPass,
 	}
 

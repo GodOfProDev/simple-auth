@@ -8,7 +8,12 @@ type User struct {
 	Password []byte
 }
 
-type CreateUserParams struct {
-	User     string
+type RegisterUserParams struct {
+	Username string
+	Password string
+}
+
+type LoginUserParams struct {
+	Username string
 	Password string
 }
