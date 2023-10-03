@@ -3,16 +3,20 @@ package main
 import (
 	"github.com/godofprodev/simple-pass/internal/config"
 	"github.com/godofprodev/simple-pass/internal/router"
-	"log/slog"
+	"github.com/joho/godotenv"
+	"log"
 )
 
 func main() {
-	v, err := initViper()
+	err := godotenv.Load(".env")
 	if err != nil {
-		slog.Error("failed to initialize viper: ", err)
+		log.Fatal("there was an issue loading .env")
 	}
 
-	serverCfg := config.NewServerConfig(v)
+	serverCfg, err := config.NewServerConfig()
+	if err != nil {
+		log.Fatal("there was an issue reading the config")
+	}
 
 	r := router.New()
 
@@ -21,6 +25,6 @@ func main() {
 
 	err = r.Listen(serverCfg)
 	if err != nil {
-		slog.Error("there was an issue listening to port 8080: ", err)
+		log.Fatal("there was an issue listening to port 8080: ", err)
 	}
 }
