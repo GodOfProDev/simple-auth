@@ -2,9 +2,9 @@ package router
 
 import (
 	"fmt"
-	"github.com/godofprodev/simple-pass/internal"
 	"github.com/godofprodev/simple-pass/internal/config"
 	"github.com/godofprodev/simple-pass/internal/handlers"
+	"github.com/godofprodev/simple-pass/internal/response"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -51,11 +51,11 @@ func (r *Router) RegisterHandlers() {
 
 func customErrorHandler(c *fiber.Ctx, err error) error {
 	switch e := err.(type) {
-	case internal.APIError:
+	case response.APIError:
 		return c.Status(e.Status).JSON(e)
-	case internal.APISuccessData:
+	case response.APISuccessData:
 		return c.Status(e.Status).JSON(e.Data)
-	case internal.APISuccessResponse:
+	case response.APISuccessResponse:
 		return c.Status(e.Status).JSON(e)
 	default:
 		return c.Status(fiber.StatusInternalServerError).JSON(map[string]interface{}{"message": "internal server error"})
