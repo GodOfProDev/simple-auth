@@ -2,6 +2,7 @@ package auth
 
 import (
 	"github.com/godofprodev/simple-pass/internal/models"
+	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
 	"os"
 	"time"
@@ -20,5 +21,9 @@ func GenerateJWT(user *models.User) (string, error) {
 }
 
 func ValidateJWT() {
+
+}
+
+func AuthenticatedUser(c *fiber.Ctx) error {
 
 }

@@ -2,6 +2,7 @@ package router
 
 import (
 	"fmt"
+	"github.com/godofprodev/simple-pass/internal/auth"
 	"github.com/godofprodev/simple-pass/internal/handlers"
 	"github.com/godofprodev/simple-pass/internal/response"
 	"github.com/gofiber/fiber/v2"
@@ -47,9 +48,12 @@ func (r *Router) RegisterHandlers() {
 
 	v1 := r.app.Group("/v1")
 
-	v1.Get("/ping", h.HandlePing)
 	v1.Post("/register", h.HandleRegister)
-	v1.Post("/login", h.HandleRegister)
+	v1.Post("/login", h.HandleLogin)
+
+	v1.Post("/logout", auth.AuthenticatedUser, h.HandleLogout)
+
+	v1.Get("/ping", auth.AuthenticatedUser, h.HandlePing)
 }
 
 func customErrorHandler(c *fiber.Ctx, err error) error {
