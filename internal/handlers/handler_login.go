@@ -1,10 +1,12 @@
 package handlers
 
 import (
+	"github.com/godofprodev/simple-pass/internal/auth"
 	"github.com/godofprodev/simple-pass/internal/models"
 	"github.com/godofprodev/simple-pass/internal/response"
 	"github.com/gofiber/fiber/v2"
 	"golang.org/x/crypto/bcrypt"
+	"time"
 )
 
 func (h *Handlers) HandleLogin(c *fiber.Ctx) error {
@@ -30,5 +32,19 @@ func (h *Handlers) HandleLogin(c *fiber.Ctx) error {
 		return response.ErrIncorrectPassword()
 	}
 
-	return response.SuccessGotten(user)
+	token, err := auth.GenerateJWT(user)
+	if err != nil {
+		return response.ErrGeneratingToken()
+	}
+
+	cookie := fiber.Cookie{
+		Name:     "jwt",
+		Value:    token,
+		Expires:  time.Now().Add(time.Hour * 24),
+		HTTPOnly: true,
+	}
+
+	c.Cookie(&cookie)
+
+	return response.SuccessMessage("successfully logged in as " + user.Username)
 }

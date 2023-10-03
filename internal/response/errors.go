@@ -68,3 +68,10 @@ func ErrIncorrectPassword() APIError {
 		Msg:    "incorrect password",
 	}
 }
+
+func ErrGeneratingToken() APIError {
+	return APIError{
+		Status: fiber.StatusInternalServerError,
+		Msg:    "there was an issue generating the jwt token",
+	}
+}
