@@ -2,8 +2,8 @@ package storage
 
 import (
 	"github.com/godofprodev/simple-pass/internal/models"
-	_ "github.com/jackc/pgx/v5"
 	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 	"os"
 )
 
@@ -44,7 +44,7 @@ func (s *PostgresStore) CreateUser(user *models.User) error {
 func (s *PostgresStore) GetUser(username string) (*models.User, error) {
 	user := new(models.User)
 
-	err := s.DB.Get(&user, getUserByUsernameSQL, username)
+	err := s.DB.Get(user, getUserByUsernameSQL, username)
 	if err != nil {
 		return nil, err
 	}
