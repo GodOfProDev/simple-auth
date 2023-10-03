@@ -6,6 +6,8 @@ import (
 	"github.com/godofprodev/simple-pass/internal/config"
 	"github.com/godofprodev/simple-pass/internal/handlers"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
 type Router struct {
@@ -30,7 +32,11 @@ func (r *Router) Listen(s *config.ServerConfig) error {
 }
 
 func (r *Router) RegisterMiddlewares() {
-
+	r.app.Use(logger.New(logger.Config{
+		Format:   "${cyan}[${time}] ${white}| ${status} | ${latency} | ${white}${ip} | ${method} | ${white}${path}\n",
+		TimeZone: "UTC",
+	}))
+	r.app.Use(cors.New())
 }
 
 func (r *Router) RegisterHandlers() {
@@ -39,6 +45,7 @@ func (r *Router) RegisterHandlers() {
 	v1 := r.app.Group("/v1")
 
 	v1.Get("/ping", h.HandlePing)
+	v1.Get("/register", h.HandleRegister)
 }
 
 func customErrorHandler(c *fiber.Ctx, err error) error {
