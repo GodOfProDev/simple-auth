@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/godofprodev/simple-pass/internal/router"
+	"github.com/godofprodev/simple-pass/internal/storage"
 	"github.com/joho/godotenv"
 	"log"
 )
@@ -12,7 +13,12 @@ func main() {
 		log.Fatal("there was an issue loading .env")
 	}
 
-	r := router.New()
+	store, err := storage.NewPostgresStore()
+	if err != nil {
+		log.Fatal("there was an issue connecting to the db")
+	}
+
+	r := router.New(store)
 
 	r.RegisterMiddlewares()
 	r.RegisterHandlers()

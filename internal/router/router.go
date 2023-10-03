@@ -5,6 +5,7 @@ import (
 	"github.com/godofprodev/simple-pass/internal/auth"
 	"github.com/godofprodev/simple-pass/internal/handlers"
 	"github.com/godofprodev/simple-pass/internal/response"
+	"github.com/godofprodev/simple-pass/internal/storage"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -12,15 +13,19 @@ import (
 )
 
 type Router struct {
-	app *fiber.App
+	app   *fiber.App
+	store storage.Storage
 }
 
-func New() *Router {
+func New(store storage.Storage) *Router {
 	app := fiber.New(fiber.Config{
 		ErrorHandler: customErrorHandler,
 	})
 
-	return &Router{app: app}
+	return &Router{
+		app:   app,
+		store: store,
+	}
 }
 
 func (r *Router) Listen() error {
@@ -44,7 +49,7 @@ func (r *Router) RegisterMiddlewares() {
 }
 
 func (r *Router) RegisterHandlers() {
-	h := handlers.New(nil)
+	h := handlers.New(r.store)
 
 	v1 := r.app.Group("/v1")
 
