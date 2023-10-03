@@ -6,5 +6,11 @@ import (
 )
 
 func (h *Handlers) HandlePing(c *fiber.Ctx) error {
-	return response.SuccessMessage("pong")
+	username := c.Locals("user")
+
+	user, err := h.store.GetUser(username.(string))
+	if err != nil {
+		return response.ErrNotFound(username.(string))
+	}
+	return response.SuccessGotten(user)
 }

@@ -75,3 +75,10 @@ func ErrGeneratingToken() APIError {
 		Msg:    "there was an issue generating the jwt token",
 	}
 }
+
+func ErrUnauthorized() APIError {
+	return APIError{
+		Status: fiber.StatusUnauthorized,
+		Msg:    "you are not authorized",
+	}
+}
